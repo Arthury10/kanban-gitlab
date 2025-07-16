@@ -1,16 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, ArrowLeft, LayoutGrid, List, GitBranch } from "lucide-react";
 import gitlabApi, { Project, Issue } from "@/lib/gitlabApi";
 import { useAppStore } from "@/lib/store";
@@ -29,7 +21,6 @@ import {
   useSensors,
   closestCorners,
 } from "@dnd-kit/core";
-import { arrayMove } from "@dnd-kit/sortable";
 
 interface KanbanBoardProps {
   project: Project;
@@ -324,8 +315,107 @@ export default function KanbanBoard({
       }
     }
 
+    // For moves between different columns, always place at the end of target column
+    const reorderedIssues = [...issues];
+
+    // Remove the issue from its current position
+    const activeGlobalIndex = reorderedIssues.findIndex(
+      (i) => i.iid === issue.iid
+    );
+    reorderedIssues.splice(activeGlobalIndex, 1);
+
+    // Find the last issue in the target column to insert after it
+    const getColumnIssuesFromArray = (
+      column: string,
+      issuesArray: Issue[]
+    ): Issue[] => {
+      const openIssues = issuesArray.filter(
+        (issue) => issue.state === "opened"
+      );
+      const closedIssues = issuesArray.filter(
+        (issue) => issue.state === "closed"
+      );
+
+      switch (column) {
+        case "todo":
+          return openIssues.filter(
+            (issue) =>
+              !issue.labels.some((label) =>
+                ["doing", "in progress", "review"].includes(label.toLowerCase())
+              )
+          );
+        case "doing":
+          return openIssues.filter((issue) =>
+            issue.labels.some((label) =>
+              ["doing", "in progress"].includes(label.toLowerCase())
+            )
+          );
+        case "review":
+          return openIssues.filter((issue) =>
+            issue.labels.some((label) =>
+              ["review", "testing"].includes(label.toLowerCase())
+            )
+          );
+        case "done":
+          return closedIssues;
+        default:
+          return [];
+      }
+    };
+
+    const targetColumnIssues = getColumnIssuesFromArray(
+      targetColumn,
+      reorderedIssues
+    );
+
+    if (targetColumnIssues.length > 0) {
+      // Find the position of the last issue in the target column within the global issues array
+      const lastIssueInTargetColumn =
+        targetColumnIssues[targetColumnIssues.length - 1];
+      const lastIssueGlobalIndex = reorderedIssues.findIndex(
+        (i) => i.iid === lastIssueInTargetColumn.iid
+      );
+
+      // Insert after the last issue in the target column
+      reorderedIssues.splice(lastIssueGlobalIndex + 1, 0, updatedIssue);
+    } else {
+      // If target column is empty, we need to find the right position based on column order
+      // Find where to insert based on column positions
+      let insertIndex = reorderedIssues.length; // Default to end
+
+      if (targetColumn === "todo") {
+        // Insert at the beginning (before any doing/review/done issues)
+        const firstNonTodoIndex = reorderedIssues.findIndex((issue) => {
+          const col = getColumnForIssue(issue);
+          return col !== "todo";
+        });
+        insertIndex = firstNonTodoIndex === -1 ? 0 : firstNonTodoIndex;
+      } else if (targetColumn === "doing") {
+        // Insert after todo issues but before review/done
+        const firstReviewOrDoneIndex = reorderedIssues.findIndex((issue) => {
+          const col = getColumnForIssue(issue);
+          return col === "review" || col === "done";
+        });
+        insertIndex =
+          firstReviewOrDoneIndex === -1
+            ? reorderedIssues.length
+            : firstReviewOrDoneIndex;
+      } else if (targetColumn === "review") {
+        // Insert after todo/doing issues but before done
+        const firstDoneIndex = reorderedIssues.findIndex((issue) => {
+          const col = getColumnForIssue(issue);
+          return col === "done";
+        });
+        insertIndex =
+          firstDoneIndex === -1 ? reorderedIssues.length : firstDoneIndex;
+      }
+      // For "done", insertIndex is already set to end
+
+      reorderedIssues.splice(insertIndex, 0, updatedIssue);
+    }
+
     // Update state immediately for fluid UX
-    updateIssue(issue.iid, updatedIssue);
+    setIssues(reorderedIssues);
 
     // Then try to update on the backend
     try {
