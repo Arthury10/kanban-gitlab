@@ -300,10 +300,10 @@ export default function KanbanBoard({
     let updatedIssue: Issue;
 
     if (targetColumn === "done") {
-      // Update UI immediately - close the issue
+      // Moving TO done column - close the issue
       updatedIssue = { ...issue, state: "closed" };
     } else {
-      // Update UI immediately - change labels
+      // Moving FROM done OR between other columns
       let newLabels = issue.labels.filter(
         (label) =>
           !["todo", "doing", "in progress", "review", "testing"].includes(
@@ -315,7 +315,13 @@ export default function KanbanBoard({
         newLabels.push(targetColumn);
       }
 
-      updatedIssue = { ...issue, labels: newLabels };
+      // If moving FROM done column, reopen the issue
+      if (currentColumn === "done") {
+        updatedIssue = { ...issue, state: "opened", labels: newLabels };
+      } else {
+        // Moving between other columns (not from done)
+        updatedIssue = { ...issue, labels: newLabels };
+      }
     }
 
     // Update state immediately for fluid UX
@@ -324,10 +330,30 @@ export default function KanbanBoard({
     // Then try to update on the backend
     try {
       if (targetColumn === "done") {
+        // Moving TO done - close the issue
         await gitlabApi.updateIssue(project.id.toString(), issue.iid, {
           state_event: "close",
         });
+      } else if (currentColumn === "done") {
+        // Moving FROM done to another column - reopen AND update labels
+        let newLabels = issue.labels.filter(
+          (label) =>
+            !["todo", "doing", "in progress", "review", "testing"].includes(
+              label.toLowerCase()
+            )
+        );
+
+        if (targetColumn !== "todo") {
+          newLabels.push(targetColumn);
+        }
+
+        // First reopen the issue, then update labels
+        await gitlabApi.updateIssue(project.id.toString(), issue.iid, {
+          state_event: "reopen",
+          labels: newLabels.join(","),
+        });
       } else {
+        // Moving between other columns (not involving done)
         let newLabels = issue.labels.filter(
           (label) =>
             !["todo", "doing", "in progress", "review", "testing"].includes(
