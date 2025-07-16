@@ -1,5 +1,4 @@
-const gitLabAccessToken = process.env.GITLAB_ACCESS_TOKEN;
-const BASE_GITLAB_URL = process.env.BASE_GITLAB_URL;
+import { makeGitLabApiRequest } from "@/app/actions";
 
 interface Project {
   id: number;
@@ -42,57 +41,35 @@ interface UpdateIssueData {
 }
 
 class GitLabAPI {
-  private async makeRequest(endpoint: string, options: RequestInit = {}) {
-    const url = `${BASE_GITLAB_URL}${endpoint}`;
-
-    try {
-      const response = await fetch(url, {
-        ...options,
-        headers: {
-          Authorization: `Bearer ${gitLabAccessToken}`,
-          "Content-Type": "application/json",
-          ...options.headers,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error: any) {
-      console.error("Erro GitLab API:", error);
-      throw error;
-    }
-  }
-
   // Buscar projetos do usuário
   async getProjects(): Promise<Project[]> {
-    return this.makeRequest("/projects?membership=true&per_page=100");
+    return await makeGitLabApiRequest("/projects?membership=true&per_page=100");
   }
 
   // Buscar projeto específico
   async getProject(projectId: string): Promise<Project> {
-    return this.makeRequest(`/projects/${encodeURIComponent(projectId)}`);
+    return await makeGitLabApiRequest(
+      `/projects/${encodeURIComponent(projectId)}`
+    );
   }
 
   // Buscar issues de um projeto
   async getIssues(projectId: string): Promise<Issue[]> {
-    return this.makeRequest(
+    return await makeGitLabApiRequest(
       `/projects/${encodeURIComponent(projectId)}/issues?per_page=100`
     );
   }
 
   // Buscar issue específica
   async getIssue(projectId: string, issueIid: number): Promise<Issue> {
-    return this.makeRequest(
+    return await makeGitLabApiRequest(
       `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}`
     );
   }
 
   // Criar nova issue
   async createIssue(projectId: string, data: CreateIssueData): Promise<Issue> {
-    return this.makeRequest(
+    return await makeGitLabApiRequest(
       `/projects/${encodeURIComponent(projectId)}/issues`,
       {
         method: "POST",
@@ -107,7 +84,7 @@ class GitLabAPI {
     issueIid: number,
     data: UpdateIssueData
   ): Promise<Issue> {
-    return this.makeRequest(
+    return await makeGitLabApiRequest(
       `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}`,
       {
         method: "PUT",

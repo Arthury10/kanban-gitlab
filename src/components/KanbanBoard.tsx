@@ -287,17 +287,23 @@ export default function KanbanBoard({
           activeIndex < overIndex ? targetGlobalIndex + 1 : targetGlobalIndex;
         reorderedIssues.splice(insertIndex, 0, activeIssue);
 
+        // Update UI immediately for fluid experience
         setIssues(reorderedIssues);
       }
       return;
     }
 
-    // Handle moving between different columns
+    // Store original state for potential rollback
+    const originalIssues = [...issues];
+
+    // Handle moving between different columns - Update UI first for fluid experience
+    let updatedIssue: Issue;
+
     if (targetColumn === "done") {
-      // Close the issue
-      await handleUpdateIssue(issue.iid, { state_event: "close" });
+      // Update UI immediately - close the issue
+      updatedIssue = { ...issue, state: "closed" };
     } else {
-      // Update labels based on new status
+      // Update UI immediately - change labels
       let newLabels = issue.labels.filter(
         (label) =>
           !["todo", "doing", "in progress", "review", "testing"].includes(
@@ -309,7 +315,38 @@ export default function KanbanBoard({
         newLabels.push(targetColumn);
       }
 
-      await handleUpdateIssue(issue.iid, { labels: newLabels.join(",") });
+      updatedIssue = { ...issue, labels: newLabels };
+    }
+
+    // Update state immediately for fluid UX
+    updateIssue(issue.iid, updatedIssue);
+
+    // Then try to update on the backend
+    try {
+      if (targetColumn === "done") {
+        await gitlabApi.updateIssue(project.id.toString(), issue.iid, {
+          state_event: "close",
+        });
+      } else {
+        let newLabels = issue.labels.filter(
+          (label) =>
+            !["todo", "doing", "in progress", "review", "testing"].includes(
+              label.toLowerCase()
+            )
+        );
+
+        if (targetColumn !== "todo") {
+          newLabels.push(targetColumn);
+        }
+
+        await gitlabApi.updateIssue(project.id.toString(), issue.iid, {
+          labels: newLabels.join(","),
+        });
+      }
+    } catch (err: any) {
+      // If backend update fails, rollback UI changes
+      setIssues(originalIssues);
+      setError(`Erro ao mover issue: ${err.message || "Erro desconhecido"}`);
     }
   };
 
