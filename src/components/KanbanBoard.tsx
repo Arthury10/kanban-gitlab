@@ -21,16 +21,13 @@ import {
   useSensors,
   closestCorners,
 } from "@dnd-kit/core";
+import Link from "next/link";
 
 interface KanbanBoardProps {
   project: Project;
-  onBackToProjects: () => void;
 }
 
-export default function KanbanBoard({
-  project,
-  onBackToProjects,
-}: KanbanBoardProps) {
+export default function KanbanBoard({ project }: KanbanBoardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingIssue, setEditingIssue] = useState<Issue | null>(null);
   const [activeIssue, setActiveIssue] = useState<Issue | null>(null);
@@ -509,10 +506,13 @@ export default function KanbanBoard({
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <Button variant="outline" onClick={onBackToProjects}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Voltar
-          </Button>
+          <Link href="/">
+            <Button variant="outline" className="cursor-pointer">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Voltar
+            </Button>
+          </Link>
+
           <div>
             <h1 className="text-3xl font-bold flex items-center gap-2">
               <GitBranch className="h-8 w-8" />

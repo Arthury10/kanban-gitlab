@@ -14,14 +14,9 @@ import { Badge } from "@/components/ui/badge";
 import { Search, GitBranch, ExternalLink } from "lucide-react";
 import gitlabApi, { Project } from "@/lib/gitlabApi";
 import { useAppStore } from "@/lib/store";
+import Link from "next/link";
 
-interface ProjectSelectorProps {
-  onProjectSelect: (project: Project) => void;
-}
-
-export default function ProjectSelector({
-  onProjectSelect,
-}: ProjectSelectorProps) {
+export default function ProjectSelector() {
   const [searchTerm, setSearchTerm] = useState("");
   const { projects, setProjects, isLoading, setLoading, error, setError } =
     useAppStore();
@@ -117,10 +112,7 @@ export default function ProjectSelector({
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProjects.map((project) => (
-              <Card
-                key={project.id}
-                className="hover:shadow-lg transition-shadow cursor-pointer group"
-              >
+              <Card className="hover:shadow-lg transition-shadow group">
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>
@@ -141,14 +133,14 @@ export default function ProjectSelector({
                   </p>
 
                   <div className="flex items-center justify-between">
-                    <Button
-                      onClick={() => onProjectSelect(project)}
-                      className="flex-1 mr-2"
-                    >
-                      Abrir Kanban
-                    </Button>
+                    <Link href={`/project/${project.id}`}>
+                      <Button className="flex-1 mr-2 cursor-pointer">
+                        Abrir Kanban
+                      </Button>
+                    </Link>
 
                     <Button
+                      className="cursor-pointer"
                       variant="outline"
                       size="sm"
                       onClick={(e) => {
