@@ -91,7 +91,9 @@ export default function IssueDialog({
 
         <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
           <div className="space-y-1 sm:space-y-2">
-            <Label htmlFor="title" className="text-sm sm:text-base">Título *</Label>
+            <Label htmlFor="title" className="text-sm sm:text-base">
+              Título *
+            </Label>
             <Input
               id="title"
               value={title}
@@ -103,7 +105,9 @@ export default function IssueDialog({
           </div>
 
           <div className="space-y-1 sm:space-y-2">
-            <Label htmlFor="description" className="text-sm sm:text-base">Descrição</Label>
+            <Label htmlFor="description" className="text-sm sm:text-base">
+              Descrição
+            </Label>
             <Textarea
               id="description"
               value={description}
@@ -115,7 +119,9 @@ export default function IssueDialog({
           </div>
 
           <div className="space-y-1 sm:space-y-2">
-            <Label htmlFor="labels" className="text-sm sm:text-base">Labels</Label>
+            <Label htmlFor="labels" className="text-sm sm:text-base">
+              Labels
+            </Label>
             <Input
               id="labels"
               value={labels}
@@ -139,8 +145,8 @@ export default function IssueDialog({
             >
               Cancelar
             </Button>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={!title.trim() || isSubmitting}
               className="w-full sm:w-auto text-sm sm:text-base h-9 sm:h-10"
             >

@@ -77,9 +77,16 @@ export default function ProjectSelector() {
     return (
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
         <div className="max-w-lg mx-auto text-center">
-          <h1 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-red-600">Erro</h1>
-          <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">{error}</p>
-          <Button onClick={loadProjects} className="h-9 sm:h-10 text-sm sm:text-base">
+          <h1 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-red-600">
+            Erro
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
+            {error}
+          </p>
+          <Button
+            onClick={loadProjects}
+            className="h-9 sm:h-10 text-sm sm:text-base"
+          >
             Tentar novamente
           </Button>
         </div>
@@ -91,7 +98,9 @@ export default function ProjectSelector() {
     <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-4xl font-bold mb-3 sm:mb-4">Kanban GitLab</h1>
+          <h1 className="text-2xl sm:text-4xl font-bold mb-3 sm:mb-4">
+            Kanban GitLab
+          </h1>
           <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
             Selecione um projeto para gerenciar suas issues
           </p>
@@ -109,12 +118,17 @@ export default function ProjectSelector() {
 
         {filteredProjects.length === 0 ? (
           <div className="text-center py-8 sm:py-12">
-            <p className="text-gray-500 text-sm sm:text-base">Nenhum projeto encontrado</p>
+            <p className="text-gray-500 text-sm sm:text-base">
+              Nenhum projeto encontrado
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
             {filteredProjects.map((project) => (
-              <Card key={project.id} className="hover:shadow-lg transition-shadow group">
+              <Card
+                key={project.id}
+                className="hover:shadow-lg transition-shadow group"
+              >
                 <CardHeader className="pb-3 sm:pb-4">
                   <div className="flex items-start justify-between">
                     <div className="min-w-0 flex-1">

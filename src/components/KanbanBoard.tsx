@@ -519,7 +519,9 @@ export default function KanbanBoard({ project }: KanbanBoardProps) {
               <GitBranch className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 flex-shrink-0" />
               <span className="truncate">{project.name}</span>
             </h1>
-            <p className="text-xs sm:text-sm text-gray-600 truncate">{project.path_with_namespace}</p>
+            <p className="text-xs sm:text-sm text-gray-600 truncate">
+              {project.path_with_namespace}
+            </p>
           </div>
         </div>
 
@@ -541,7 +543,11 @@ export default function KanbanBoard({ project }: KanbanBoardProps) {
             </TabsList>
           </Tabs>
 
-          <Button onClick={() => setIsDialogOpen(true)} size="sm" className="w-full sm:w-auto">
+          <Button
+            onClick={() => setIsDialogOpen(true)}
+            size="sm"
+            className="w-full sm:w-auto"
+          >
             <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
             <span className="hidden sm:inline">Nova Issue</span>
             <span className="sm:hidden">Nova</span>

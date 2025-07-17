@@ -152,7 +152,11 @@ export default function IssueCard({
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-6 w-6 sm:h-8 sm:w-8 p-0">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 w-6 sm:h-8 sm:w-8 p-0"
+              >
                 <MoreHorizontal className="h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -201,7 +205,11 @@ export default function IssueCard({
         {issue.labels.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-2 sm:mb-3">
             {issue.labels.slice(0, 2).map((label, index) => (
-              <Badge key={index} variant="outline" className="text-xs px-1 py-0">
+              <Badge
+                key={index}
+                variant="outline"
+                className="text-xs px-1 py-0"
+              >
                 {label}
               </Badge>
             ))}
@@ -222,11 +230,11 @@ export default function IssueCard({
                 className="w-3 h-3 sm:w-4 sm:h-4 rounded-full mr-1 flex-shrink-0"
               />
             )}
-            <span className="truncate text-xs">
-              {issue.author.username}
-            </span>
+            <span className="truncate text-xs">{issue.author.username}</span>
           </div>
-          <span className="text-xs ml-2 flex-shrink-0">{formatDate(issue.created_at)}</span>
+          <span className="text-xs ml-2 flex-shrink-0">
+            {formatDate(issue.created_at)}
+          </span>
         </div>
       </CardContent>
     </Card>
