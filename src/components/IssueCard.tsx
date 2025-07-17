@@ -62,25 +62,26 @@ export default function IssueCard({
     return new Date(dateString).toLocaleDateString("pt-BR");
   };
 
-  const getStatusColor = () => {
-    if (isDone) return "bg-green-100 border-green-200";
+  const getCardStyles = () => {
+    if (isDone) {
+      return "bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800";
+    }
     if (
       issue.labels.some((label) =>
         ["doing", "in progress"].includes(label.toLowerCase())
       )
     ) {
-      return "bg-blue-100 border-blue-200";
+      return "bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800";
     }
     if (
       issue.labels.some((label) =>
         ["review", "testing"].includes(label.toLowerCase())
       )
     ) {
-      return "bg-yellow-100 border-yellow-200";
+      return "bg-yellow-50 dark:bg-yellow-950/30 border-yellow-200 dark:border-yellow-800";
     }
-    return "bg-gray-50 border-gray-200";
+    return "bg-card border-border";
   };
-
   const getMoveOptions = () => {
     if (isDone) {
       return [{ label: "Reabrir", value: "reopen", icon: RotateCcw }];
@@ -126,7 +127,7 @@ export default function IssueCard({
       style={style}
       className={cn(
         "hover:shadow-md transition-shadow max-w-full text-xs sm:text-sm",
-        getStatusColor(),
+        getCardStyles(),
         isDragging && "opacity-50 rotate-3 shadow-xl"
       )}
     >
@@ -197,7 +198,7 @@ export default function IssueCard({
 
       <CardContent className="pt-0 p-3 sm:p-4">
         {issue.description && (
-          <p className="text-xs text-gray-600 mb-2 sm:mb-3 line-clamp-2">
+          <p className="text-xs text-muted-foreground mb-2 sm:mb-3 line-clamp-2">
             {issue.description}
           </p>
         )}
@@ -221,7 +222,7 @@ export default function IssueCard({
           </div>
         )}
 
-        <div className="flex items-center justify-between text-xs text-gray-500">
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center min-w-0 flex-1">
             {issue.author.avatar_url && (
               <img

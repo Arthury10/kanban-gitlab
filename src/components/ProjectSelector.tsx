@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Search, GitBranch, ExternalLink } from "lucide-react";
 import gitlabApi, { Project } from "@/lib/gitlabApi";
 import { useAppStore } from "@/lib/store";
+import { ThemeToggle } from "./theme-toggle";
 import Link from "next/link";
 
 export default function ProjectSelector() {
@@ -97,16 +98,20 @@ export default function ProjectSelector() {
   return (
     <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
       <div className="max-w-6xl mx-auto">
+        <div className="flex justify-end mb-4">
+          <ThemeToggle />
+        </div>
+
         <div className="text-center mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-4xl font-bold mb-3 sm:mb-4">
             Kanban GitLab
           </h1>
-          <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
+          <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
             Selecione um projeto para gerenciar suas issues
           </p>
 
           <div className="relative max-w-sm sm:max-w-md mx-auto">
-            <Search className="absolute left-3 top-2.5 sm:top-3 h-3 w-3 sm:h-4 sm:w-4 text-gray-400" />
+            <Search className="absolute left-3 top-2.5 sm:top-3 h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
             <Input
               placeholder="Buscar projetos..."
               value={searchTerm}
@@ -118,7 +123,7 @@ export default function ProjectSelector() {
 
         {filteredProjects.length === 0 ? (
           <div className="text-center py-8 sm:py-12">
-            <p className="text-gray-500 text-sm sm:text-base">
+            <p className="text-muted-foreground text-sm sm:text-base">
               Nenhum projeto encontrado
             </p>
           </div>

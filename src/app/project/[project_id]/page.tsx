@@ -11,7 +11,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const project = await gitlabApi.getProject(projectId);
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <KanbanBoard project={project} />
     </main>
   );

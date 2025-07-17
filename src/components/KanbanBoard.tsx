@@ -10,6 +10,7 @@ import IssueDialog from "./IssueDialog";
 import IssueCard from "./IssueCard";
 import IssueList from "./IssueList";
 import DroppableColumn from "./DroppableColumn";
+import { ThemeToggle } from "./theme-toggle";
 import {
   DndContext,
   DragEndEvent,
@@ -526,22 +527,26 @@ export default function KanbanBoard({ project }: KanbanBoardProps) {
         </div>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
-          <Tabs
-            value={viewMode}
-            onValueChange={(value) => setViewMode(value as "kanban" | "list")}
-          >
-            <TabsList className="grid w-full grid-cols-2 sm:w-auto">
-              <TabsTrigger value="kanban" className="text-xs sm:text-sm">
-                <LayoutGrid className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                <span className="hidden sm:inline">Kanban</span>
-                <span className="sm:hidden">Board</span>
-              </TabsTrigger>
-              <TabsTrigger value="list" className="text-xs sm:text-sm">
-                <List className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                Lista
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+
+            <Tabs
+              value={viewMode}
+              onValueChange={(value) => setViewMode(value as "kanban" | "list")}
+            >
+              <TabsList className="grid w-full grid-cols-2 sm:w-auto">
+                <TabsTrigger value="kanban" className="text-xs sm:text-sm">
+                  <LayoutGrid className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">Kanban</span>
+                  <span className="sm:hidden">Board</span>
+                </TabsTrigger>
+                <TabsTrigger value="list" className="text-xs sm:text-sm">
+                  <List className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                  Lista
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
 
           <Button
             onClick={() => setIsDialogOpen(true)}
