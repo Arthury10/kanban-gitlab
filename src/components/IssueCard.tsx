@@ -125,25 +125,25 @@ export default function IssueCard({
       ref={setNodeRef}
       style={style}
       className={cn(
-        "hover:shadow-md transition-shadow max-w-full",
+        "hover:shadow-md transition-shadow max-w-full text-xs sm:text-sm",
         getStatusColor(),
         isDragging && "opacity-50 rotate-3 shadow-xl"
       )}
     >
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-4">
         <div className="flex items-start justify-between">
-          <div className="flex items-start gap-2 flex-1">
+          <div className="flex items-start gap-1 sm:gap-2 flex-1">
             <Button
               variant="ghost"
               size="sm"
-              className="h-6 w-6 p-0 cursor-grab active:cursor-grabbing"
+              className="h-5 w-5 sm:h-6 sm:w-6 p-0 cursor-grab active:cursor-grabbing"
               {...attributes}
               {...listeners}
             >
-              <GripVertical className="h-3 w-3 text-gray-400" />
+              <GripVertical className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-gray-400" />
             </Button>
-            <div className="flex-1">
-              <h4 className="font-medium text-sm mb-1 line-clamp-2">
+            <div className="flex-1 min-w-0">
+              <h4 className="font-medium text-xs sm:text-sm mb-1 line-clamp-2">
                 {issue.title}
               </h4>
               <p className="text-xs text-gray-500">#{issue.iid}</p>
@@ -152,8 +152,8 @@ export default function IssueCard({
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                <MoreHorizontal className="h-4 w-4" />
+              <Button variant="ghost" size="sm" className="h-6 w-6 sm:h-8 sm:w-8 p-0">
+                <MoreHorizontal className="h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -191,42 +191,42 @@ export default function IssueCard({
         </div>
       </CardHeader>
 
-      <CardContent className="pt-0">
+      <CardContent className="pt-0 p-3 sm:p-4">
         {issue.description && (
-          <p className="text-xs text-gray-600 mb-3 line-clamp-2">
+          <p className="text-xs text-gray-600 mb-2 sm:mb-3 line-clamp-2">
             {issue.description}
           </p>
         )}
 
         {issue.labels.length > 0 && (
-          <div className="flex flex-wrap gap-1 mb-3">
-            {issue.labels.slice(0, 3).map((label, index) => (
-              <Badge key={index} variant="outline" className="text-xs">
+          <div className="flex flex-wrap gap-1 mb-2 sm:mb-3">
+            {issue.labels.slice(0, 2).map((label, index) => (
+              <Badge key={index} variant="outline" className="text-xs px-1 py-0">
                 {label}
               </Badge>
             ))}
-            {issue.labels.length > 3 && (
-              <Badge variant="outline" className="text-xs">
-                +{issue.labels.length - 3}
+            {issue.labels.length > 2 && (
+              <Badge variant="outline" className="text-xs px-1 py-0">
+                +{issue.labels.length - 2}
               </Badge>
             )}
           </div>
         )}
 
         <div className="flex items-center justify-between text-xs text-gray-500">
-          <div className="flex items-center">
+          <div className="flex items-center min-w-0 flex-1">
             {issue.author.avatar_url && (
               <img
                 src={issue.author.avatar_url}
                 alt={issue.author.name}
-                className="w-4 h-4 rounded-full mr-1"
+                className="w-3 h-3 sm:w-4 sm:h-4 rounded-full mr-1 flex-shrink-0"
               />
             )}
-            <span className="truncate max-w-[120px]">
+            <span className="truncate text-xs">
               {issue.author.username}
             </span>
           </div>
-          <span>{formatDate(issue.created_at)}</span>
+          <span className="text-xs ml-2 flex-shrink-0">{formatDate(issue.created_at)}</span>
         </div>
       </CardContent>
     </Card>

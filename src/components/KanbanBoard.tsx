@@ -502,46 +502,49 @@ export default function KanbanBoard({ project }: KanbanBoardProps) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+        <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto">
           <Link href="/">
-            <Button variant="outline" className="cursor-pointer">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Voltar
+            <Button variant="outline" className="cursor-pointer" size="sm">
+              <ArrowLeft className="h-4 w-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Voltar</span>
+              <span className="sm:hidden">←</span>
             </Button>
           </Link>
 
-          <div>
-            <h1 className="text-3xl font-bold flex items-center gap-2">
-              <GitBranch className="h-8 w-8" />
-              {project.name}
+          <div className="min-w-0 flex-1 sm:flex-none">
+            <h1 className="text-lg sm:text-2xl lg:text-3xl font-bold flex items-center gap-1 sm:gap-2">
+              <GitBranch className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 flex-shrink-0" />
+              <span className="truncate">{project.name}</span>
             </h1>
-            <p className="text-gray-600">{project.path_with_namespace}</p>
+            <p className="text-xs sm:text-sm text-gray-600 truncate">{project.path_with_namespace}</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
           <Tabs
             value={viewMode}
             onValueChange={(value) => setViewMode(value as "kanban" | "list")}
           >
-            <TabsList>
-              <TabsTrigger value="kanban">
-                <LayoutGrid className="h-4 w-4 mr-2" />
-                Kanban
+            <TabsList className="grid w-full grid-cols-2 sm:w-auto">
+              <TabsTrigger value="kanban" className="text-xs sm:text-sm">
+                <LayoutGrid className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Kanban</span>
+                <span className="sm:hidden">Board</span>
               </TabsTrigger>
-              <TabsTrigger value="list">
-                <List className="h-4 w-4 mr-2" />
+              <TabsTrigger value="list" className="text-xs sm:text-sm">
+                <List className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                 Lista
               </TabsTrigger>
             </TabsList>
           </Tabs>
 
-          <Button onClick={() => setIsDialogOpen(true)}>
-            <Plus className="h-4 w-4 mr-2" />
-            Nova Issue
+          <Button onClick={() => setIsDialogOpen(true)} size="sm" className="w-full sm:w-auto">
+            <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">Nova Issue</span>
+            <span className="sm:hidden">Nova</span>
           </Button>
         </div>
       </div>
@@ -569,7 +572,7 @@ export default function KanbanBoard({ project }: KanbanBoardProps) {
           onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
         >
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             <DroppableColumn
               id="todo"
               title="To Do"

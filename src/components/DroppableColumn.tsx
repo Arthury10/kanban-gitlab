@@ -44,17 +44,17 @@ export default function DroppableColumn({
   const issueIds = issues.map((issue) => `issue-${issue.iid}`);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-lg">{title}</h3>
-        <Badge variant="secondary">{issues.length}</Badge>
+        <h3 className="font-semibold text-base sm:text-lg">{title}</h3>
+        <Badge variant="secondary" className="text-xs">{issues.length}</Badge>
       </div>
 
       <div
         ref={setNodeRef}
         className={cn(
-          "min-h-[300px] space-y-3 p-4 rounded-lg border-2 border-dashed transition-all duration-200",
-          isOver || isDraggedOver
+          "min-h-[200px] sm:min-h-[300px] space-y-2 sm:space-y-3 p-3 sm:p-4 rounded-lg border-2 border-dashed transition-all duration-200",
+          (isOver || isDraggedOver)
             ? "border-blue-400 bg-blue-50 scale-[1.02] shadow-lg"
             : "border-gray-200 bg-gray-50/30 hover:bg-gray-50/50"
         )}
@@ -77,7 +77,7 @@ export default function DroppableColumn({
         </SortableContext>
 
         {issues.length === 0 && (
-          <div className="flex items-center justify-center h-32 text-gray-400 text-sm">
+          <div className="flex items-center justify-center h-24 sm:h-32 text-gray-400 text-xs sm:text-sm">
             Arraste uma issue para cá
           </div>
         )}
